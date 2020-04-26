@@ -2,17 +2,20 @@
     "name": "backend-server",
     "version": "1.0.0",
     "description": "Server backendo for admin pro",
-    "main": "index.js",
+    "private": true,
     "scripts": {
-        "start": "nodemon app.js",
+        "start": "node ./bin/www",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "author": "Cristhian Apolo Cevallos",
-    "license": "ISC",
     "dependencies": {
         "body-parser": "^1.19.0",
+        "cookie-parser": "^1.4.5",
+        "debug": "~2.6.9",
         "express": "^4.17.1",
-        "mongoose": "^5.9.10"
+        "http-errors": "~1.6.3",
+        "mongoose": "^5.9.10",
+        "morgan": "~1.9.1",
+        "pug": "2.0.0-beta11"
     },
     "devDependencies": {
         "nodemon": "^2.0.3"
