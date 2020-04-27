@@ -4,16 +4,17 @@
     "description": "Server backendo for admin pro",
     "private": true,
     "scripts": {
-        "start": "node ./bin/www",
+        "start": "nodemon ./bin/www",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
-        "body-parser": "^1.19.0",
+        "bcrypt": "^4.0.1",
         "cookie-parser": "^1.4.5",
         "debug": "~2.6.9",
         "express": "^4.17.1",
         "http-errors": "~1.6.3",
         "mongoose": "^5.9.10",
+        "mongoose-unique-validator": "^2.0.3",
         "morgan": "~1.9.1",
         "pug": "2.0.0-beta11"
     },
