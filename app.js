@@ -6,22 +6,25 @@ var express = require("express");
 var mongoose = require("mongoose");
 // Logs
 var logger = require("morgan");
+// Config
+require('./config/config');
 var path = require("path");
 
 /* Middlewares */
 // Analiza el encabezado de la cookie y completa las cookies de req.
 var cookieParser = require("cookie-parser");
+var app = express();
 
 // Import Routes
-var indexRouter = require("./routes/index");
-var usuarioRouter = require("./routes/users");
+var homeRouter = require("./routes/home");
+var usuarioRouter = require("./routes/usuario");
+var loginRouter = require("./routes/login");
+//app.use(require('./routes/index'));
 // ==========================================
-
-var app = express();
 
 // Conecct BD
 mongoose.connect(
-    "mongodb://localhost:27017/hospitalDB", {
+    process.env.URLDB, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     },
@@ -44,8 +47,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 /* Rutas */
-app.use("/", indexRouter);
-app.use("/usuario", usuarioRouter);
+app.use("/", homeRouter);
+app.use("/usuarios", usuarioRouter);
+app.use("/login", loginRouter);
 
 /* Manejador de errores */
 // catch 404 and forward to error handler
