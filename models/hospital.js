@@ -26,4 +26,4 @@ var hospitalSchema = new Schema({
 
 hospitalSchema.plugin(uniqueValidator, { message: "{PATH} debe ser único" });
 
-module.exports = mongoose.model("Medico", hospitalSchema);
+module.exports = mongoose.model("Hospital", hospitalSchema);

@@ -1,98 +1,100 @@
 const express = require("express");
 const router = express.Router();
 
-var Hospital = require("../models/hospital");
+var Medico = require("../models/medico");
 var verificarToken = require("../middleware/auth");
 
 
 // ==================================================
-// Obtener todos los hospital
+// Obtener todos los medicos
 // ==================================================
 router.get("/", (req, res, next) => {
     // Filtra solo ciertas columnas
-    Hospital.find({}).exec((err, hospital) => {
+    Medico.find({}).exec((err, medicos) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
-                msg: "Error cargando hospitales",
+                msg: "Error cargando medicos",
                 error: err,
             });
         }
         res.status(200).json({
             ok: true,
-            hospital: hospital,
+            medico: medicos,
         });
     });
 });
 
 
 // ==================================================
-// Crear un hospital
+// Crear un medico
 // ==================================================
 router.post("/crear", verificarToken.verificarToken, (req, res) => {
     var body = req.body;
 
-    var hospital = new Hospital({
-        nombre: body.nombre,
+    var medico = new Medico({
+        nombres: body.nombres,
+        apellidos: body.apellidos,
         img: body.img,
-        usuario: body.usuario
+        usuario: body.usuario,
+        hospital: body.hospital,
     });
 
-    hospital.save((err, hospitalDB) => {
+    medico.save((err, medicoDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
                 error: err,
             });
         }
-        if (!hospitalDB) {
+        if (!medicoDB) {
             return res.status(400).json({
                 ok: false,
-                msg: "hospital existente",
+                msg: "Medico existente",
                 error: err,
             });
         }
         res.status(200).json({
             ok: true,
-            hospital: hospitalDB,
+            medico: medicoDB,
             // Quien solicito la peticion
-            hospitalToken: req.usuario,
+            usuarioToken: req.usuario,
         });
     });
 });
 
 
 // ==================================================
-// Actualizar un hospital
+// Actualizar un medico
 // ==================================================
 router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
-    Hospital.findByIdAndUpdate(
+    Medico.findByIdAndUpdate(
         id,
         body, {
             new: true,
         },
-        (err, hospitalDB) => {
+        (err, medicoDB) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
                     error: err,
                 });
             }
-            if (!hospitalDB) {
+            if (!medicoDB) {
                 return res.status(400).json({
                     ok: false,
-                    msg: "El hospital con el id" + id + " no existe",
-                    error: { msj: "No existe un hospital con ese ID" },
+                    msg: "El medico con el id" + id + " no existe",
+                    error: { msj: "No existe un medico con ese ID" },
                 });
             }
-            //res.send(hospitalDB)
+            //res.send(medicoDB)
             res.status(200).json({
                 ok: true,
-                msg: "hospital actualizado correctamente",
-                hospital: hospitalDB,
+                msg: "Medico actualizado correctamente",
+                medico: medicoDB,
             });
         }
     );
@@ -100,29 +102,29 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
 
 
 // ==================================================
-// Eliminar un hospital
+// Eliminar un medico
 // ==================================================
 router.delete("/:id/eliminar", verificarToken.verificarToken, (req, res) => {
     var id = req.params.id;
 
-    Hospital.findByIdAndRemove(id, (err, hospitalDB) => {
+    Medico.findByIdAndRemove(id, (err, medicoDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
                 error: err,
             });
         }
-        if (!hospitalDB) {
+        if (!medicoDB) {
             return res.status(400).json({
                 ok: false,
-                msg: "El hospital con el id" + id + " no existe",
-                error: { msj: "No existe un hospital con ese ID" },
+                msg: "El medico con el id" + id + " no existe",
+                error: { msj: "No existe un medico con ese ID" },
             });
         }
-        //res.send(hospitalDB)
+        //res.send(medicoDB)
         res.status(200).json({
             ok: true,
-            msg: "hospital borrado",
+            msg: "Medico borrado",
         });
     });
 });
