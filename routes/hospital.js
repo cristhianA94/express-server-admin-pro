@@ -1,103 +1,98 @@
 const express = require("express");
 const router = express.Router();
-// Encriptacion 1 via
-const bcrypt = require("bcrypt");
 
-var Usuario = require("../models/usuario");
+var Hospital = require("../models/hospital");
 var verificarToken = require("../middleware/auth");
 
 
 // ==================================================
-// Obtener todos los usuarios
+// Obtener todos los hospital
 // ==================================================
 router.get("/", (req, res, next) => {
     // Filtra solo ciertas columnas
-    Usuario.find({}, "nombres apellidos email img role").exec((err, usuarios) => {
+    Hospital.find({}).exec((err, hospital) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
-                msg: "Error cargando usuarios",
+                msg: "Error cargando hospitales",
                 error: err,
             });
         }
         res.status(200).json({
             ok: true,
-            usuario: usuarios,
+            hospital: hospital,
         });
     });
 });
 
 
 // ==================================================
-// Crear un usuario
+// Crear un hospital
 // ==================================================
 router.post("/crear", verificarToken.verificarToken, (req, res) => {
     var body = req.body;
 
-    var usuario = new Usuario({
-        nombres: body.nombres,
-        apellidos: body.apellidos,
-        email: body.email,
-        password: bcrypt.hashSync(body.password, 10),
+    var hospital = new Hospital({
+        nombre: body.nombre,
         img: body.img,
-        role: body.role,
+        usuario: body.usuario
     });
 
-    usuario.save((err, usuarioDB) => {
+    hospital.save((err, hospitalDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
                 error: err,
             });
         }
-        if (!usuarioDB) {
+        if (!hospitalDB) {
             return res.status(400).json({
                 ok: false,
-                msg: "Usuario existente",
+                msg: "hospital existente",
                 error: err,
             });
         }
         res.status(200).json({
             ok: true,
-            usuario: usuarioDB,
+            hospital: hospitalDB,
             // Quien solicito la peticion
-            usuarioToken: req.usuario
+            //hospitalToken: req.hospital,
         });
     });
 });
 
 
 // ==================================================
-// Actualizar un usuario
+// Actualizar un hospital
 // ==================================================
 router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
-    Usuario.findByIdAndUpdate(
+    Hospital.findByIdAndUpdate(
         id,
         body, {
             new: true,
         },
-        (err, usuarioDB) => {
+        (err, hospitalDB) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
                     error: err,
                 });
             }
-            if (!usuarioDB) {
+            if (!hospitalDB) {
                 return res.status(400).json({
                     ok: false,
-                    msg: "El usuario con el id" + id + " no existe",
-                    error: { msj: "No existe un usuario con ese ID" },
+                    msg: "El hospital con el id" + id + " no existe",
+                    error: { msj: "No existe un hospital con ese ID" },
                 });
             }
-            //res.send(usuarioDB)
+            //res.send(hospitalDB)
             res.status(200).json({
                 ok: true,
-                msg: "Usuario actualizado correctamente",
-                usuario: usuarioDB,
+                msg: "hospital actualizado correctamente",
+                hospital: hospitalDB,
             });
         }
     );
@@ -105,29 +100,29 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
 
 
 // ==================================================
-// Eliminar un usuario
+// Eliminar un hospital
 // ==================================================
 router.delete("/:id/eliminar", verificarToken.verificarToken, (req, res) => {
     var id = req.params.id;
 
-    Usuario.findByIdAndRemove(id, (err, usuarioDB) => {
+    Hospital.findByIdAndRemove(id, (err, hospitalDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
                 error: err,
             });
         }
-        if (!usuarioDB) {
+        if (!hospitalDB) {
             return res.status(400).json({
                 ok: false,
-                msg: "El usuario con el id" + id + " no existe",
-                error: { msj: "No existe un usuario con ese ID" },
+                msg: "El hospital con el id" + id + " no existe",
+                error: { msj: "No existe un hospital con ese ID" },
             });
         }
-        //res.send(usuarioDB)
+        //res.send(hospitalDB)
         res.status(200).json({
             ok: true,
-            msg: "Usuario borrado",
+            msg: "hospital borrado",
         });
     });
 });

@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 // campos únicos dentro de un Schema.
 const uniqueValidator = require('mongoose-unique-validator');
 
-const Schema = mongoose.Schema;
+var Schema = mongoose.Schema;
 
 var rolesValidos = {
     values: ['ADMIN_ROLE', 'USER_ROLE'],
@@ -37,30 +37,12 @@ var usuarioSchema = new Schema({
     role: {
         type: String,
         required: true,
-        // Valor por defecto
         default: 'USER_ROLE',
         enum: rolesValidos
-    }
+    },
 });
 
 
 usuarioSchema.plugin(uniqueValidator, { message: '{PATH} debe ser único' });
 
 module.exports = mongoose.model('Usuario', usuarioSchema);
-
-/*
-let userschema = new Schema({
-
-    rol: {
-        type: Schema.Types.ObjectId,
-        ref: 'Rol',
-        required: [true, "El nombre es Requerido"]
-    }
-});
-
-userschema.methods.toJSON = function() {
-    let user = this
-    let user_object = user.toObject()
-    delete user_object.password
-    return user_object
-}; */

@@ -17,9 +17,10 @@ var app = express();
 
 // Import Routes
 var homeRouter = require("./routes/home");
-var usuarioRouter = require("./routes/usuario");
 var loginRouter = require("./routes/login");
-//app.use(require('./routes/index'));
+var usuarioRouter = require("./routes/usuario");
+var medicoRouter = require("./routes/medico");
+var hospitalRouter = require("./routes/hospital");
 // ==========================================
 
 // Conecct BD
@@ -48,8 +49,10 @@ app.use(cookieParser());
 
 /* Rutas */
 app.use("/", homeRouter);
-app.use("/usuarios", usuarioRouter);
 app.use("/login", loginRouter);
+app.use("/usuarios", usuarioRouter);
+app.use("/medicos", medicoRouter);
+app.use("/hospitales", hospitalRouter);
 
 /* Manejador de errores */
 // catch 404 and forward to error handler
