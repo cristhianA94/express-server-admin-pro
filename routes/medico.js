@@ -10,37 +10,37 @@ var verificarToken = require("../middleware/auth");
 // ==================================================
 router.get("/", (req, res, next) => {
     // Filtra solo ciertas columnas
-    Medico.find({}).exec((err, medicos) => {
+    Medico.find({}).exec((err, médicosDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
-                msg: "Error cargando medicos",
+                msg: "Error cargando médicos",
                 error: err,
             });
         }
         res.status(200).json({
             ok: true,
-            medico: medicos,
+            médico: médicosDB,
         });
     });
 });
 
 
 // ==================================================
-// Crear un medico
+// Crear un médico
 // ==================================================
 router.post("/crear", verificarToken.verificarToken, (req, res) => {
     var body = req.body;
 
-    var medico = new Medico({
+    var médico = new Medico({
         nombres: body.nombres,
         apellidos: body.apellidos,
         img: body.img,
-        usuario: body.usuario,
-        hospital: body.hospital,
+        usuario: req.usuario,
+        hospital: body.hospital // Se seleccionara el hospital en un select en el Front
     });
 
-    medico.save((err, medicoDB) => {
+    médico.save((err, medicoDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -56,7 +56,7 @@ router.post("/crear", verificarToken.verificarToken, (req, res) => {
         }
         res.status(200).json({
             ok: true,
-            medico: medicoDB,
+            médico: medicoDB,
             // Quien solicito la peticion
             usuarioToken: req.usuario,
         });
@@ -65,7 +65,7 @@ router.post("/crear", verificarToken.verificarToken, (req, res) => {
 
 
 // ==================================================
-// Actualizar un medico
+// Actualizar un médico
 // ==================================================
 router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
     var id = req.params.id;
@@ -86,15 +86,15 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
             if (!medicoDB) {
                 return res.status(400).json({
                     ok: false,
-                    msg: "El medico con el id" + id + " no existe",
-                    error: { msj: "No existe un medico con ese ID" },
+                    msg: "El médico con el id" + id + " no existe",
+                    error: { msj: "No existe un médico con ese ID" },
                 });
             }
             //res.send(medicoDB)
             res.status(200).json({
                 ok: true,
                 msg: "Medico actualizado correctamente",
-                medico: medicoDB,
+                médico: medicoDB,
             });
         }
     );
@@ -102,7 +102,7 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
 
 
 // ==================================================
-// Eliminar un medico
+// Eliminar un médico
 // ==================================================
 router.delete("/:id/eliminar", verificarToken.verificarToken, (req, res) => {
     var id = req.params.id;
@@ -117,8 +117,8 @@ router.delete("/:id/eliminar", verificarToken.verificarToken, (req, res) => {
         if (!medicoDB) {
             return res.status(400).json({
                 ok: false,
-                msg: "El medico con el id" + id + " no existe",
-                error: { msj: "No existe un medico con ese ID" },
+                msg: "El médico con el id" + id + " no existe",
+                error: { msj: "No existe un médico con ese ID" },
             });
         }
         //res.send(medicoDB)

@@ -22,7 +22,7 @@ var usuarioSchema = new Schema({
     email: {
         type: String,
         unique: true,
-        // Valida la sensibilidad del registro
+        // Valida la sensibilidad a mayusculas del registro
         uniqueCaseInsensitive: true,
         required: [true, "El email es requerido"],
     },
@@ -38,9 +38,9 @@ var usuarioSchema = new Schema({
         type: String,
         required: true,
         default: 'USER_ROLE',
-        enum: rolesValidos
+        enum: rolesValidos // Solo pueden existir los valores llamados
     },
-});
+}, { collection: 'usuarios' }); // Crea la coleccion en DB con ese nombre
 
 
 usuarioSchema.plugin(uniqueValidator, { message: '{PATH} debe ser único' });

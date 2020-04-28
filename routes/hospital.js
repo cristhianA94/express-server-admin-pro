@@ -35,7 +35,7 @@ router.post("/crear", verificarToken.verificarToken, (req, res) => {
     var hospital = new Hospital({
         nombre: body.nombre,
         img: body.img,
-        usuario: body.usuario
+        usuario: req.usuario._id // Coge el id del user existente
     });
 
     hospital.save((err, hospitalDB) => {
@@ -48,7 +48,7 @@ router.post("/crear", verificarToken.verificarToken, (req, res) => {
         if (!hospitalDB) {
             return res.status(400).json({
                 ok: false,
-                msg: "hospital existente",
+                msg: "Hospital existente",
                 error: err,
             });
         }
@@ -91,7 +91,7 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
             //res.send(hospitalDB)
             res.status(200).json({
                 ok: true,
-                msg: "hospital actualizado correctamente",
+                msg: "Hospital actualizado correctamente",
                 hospital: hospitalDB,
             });
         }
@@ -119,10 +119,9 @@ router.delete("/:id/eliminar", verificarToken.verificarToken, (req, res) => {
                 error: { msj: "No existe un hospital con ese ID" },
             });
         }
-        //res.send(hospitalDB)
         res.status(200).json({
             ok: true,
-            msg: "hospital borrado",
+            msg: "Hospital borrado",
         });
     });
 });

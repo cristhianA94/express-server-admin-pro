@@ -8,7 +8,7 @@ var hospitalSchema = new Schema({
     nombre: {
         type: String,
         unique: true,
-        // Valida la sensibilidad del registro
+        // Valida la sensibilidad a mayusculas del registro
         uniqueCaseInsensitive: true,
         required: [true, "El nombre es requerido"]
     },
@@ -16,12 +16,11 @@ var hospitalSchema = new Schema({
         type: String,
         required: false,
     },
-    // Relacion
     usuario: {
         type: Schema.Types.ObjectId,
         ref: "Usuario"
     },
-}, { collection: 'hospitales' }); // Crea el nombre de la collecion indicado
+}, { collection: 'hospitales' });
 
 
 hospitalSchema.plugin(uniqueValidator, { message: "{PATH} debe ser único" });
