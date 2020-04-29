@@ -44,7 +44,8 @@ router.post("/", (req, res) => {
                 var token = jwt.sign({
                         usuario: usuarioDB,
                     },
-                    process.env.SEED, { // Importa config
+                    process.env.SEED, {
+                        // Importa config
                         expiresIn: process.env.CADUCIDAD,
                     }
                 );
@@ -53,7 +54,7 @@ router.post("/", (req, res) => {
                     ok: true,
                     usuario: usuarioDB,
                     token: token,
-                    id: usuarioDB._id,
+                    //id: usuarioDB._id,
                 });
             }
         }

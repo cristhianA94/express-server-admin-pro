@@ -20,7 +20,7 @@ var usuarioSchema = new Schema({
         required: [true, "Los apellidos son requeridos"],
     },
     email: {
-        type: String,
+        type: String,   
         unique: true,
         // Valida la sensibilidad a mayusculas del registro
         uniqueCaseInsensitive: true,

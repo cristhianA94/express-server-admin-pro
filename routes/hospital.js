@@ -4,27 +4,36 @@ const router = express.Router();
 var Hospital = require("../models/hospital");
 var verificarToken = require("../middleware/auth");
 
-
 // ==================================================
 // Obtener todos los hospital
 // ==================================================
 router.get("/", (req, res, next) => {
-    // Filtra solo ciertas columnas
-    Hospital.find({}).exec((err, hospital) => {
-        if (err) {
-            return res.status(500).json({
-                ok: false,
-                msg: "Error cargando hospitales",
-                error: err,
-            });
-        }
-        res.status(200).json({
-            ok: true,
-            hospital: hospital,
-        });
-    });
-});
+    // Paginacion
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
 
+    Hospital.find({})
+        // Filtra solo ciertas columnas
+        .populate("usuario", "nombres apellidos email") // Permite acceder a la data completa del usuario
+        //.limit(5)
+        .skip(desde)
+        .exec((err, hospitales) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    msg: "Error cargando hospitales",
+                    error: err,
+                });
+            }
+            Hospital.count({}, (err, count) => {
+                res.status(200).json({
+                    ok: true,
+                    hospital: hospitales,
+                    total: count,
+                });
+            });
+        });
+});
 
 // ==================================================
 // Crear un hospital
@@ -35,7 +44,7 @@ router.post("/crear", verificarToken.verificarToken, (req, res) => {
     var hospital = new Hospital({
         nombre: body.nombre,
         img: body.img,
-        usuario: req.usuario._id // Coge el id del user existente
+        usuario: req.usuario, // Coge el id del user existente
     });
 
     hospital.save((err, hospitalDB) => {
@@ -60,7 +69,6 @@ router.post("/crear", verificarToken.verificarToken, (req, res) => {
         });
     });
 });
-
 
 // ==================================================
 // Actualizar un hospital
@@ -97,7 +105,6 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
         }
     );
 });
-
 
 // ==================================================
 // Eliminar un hospital

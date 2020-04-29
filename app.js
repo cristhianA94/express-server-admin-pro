@@ -21,6 +21,8 @@ var loginRouter = require("./routes/login");
 var usuarioRouter = require("./routes/usuario");
 var medicoRouter = require("./routes/medico");
 var hospitalRouter = require("./routes/hospital");
+var busquedaRouter = require("./routes/busqueda");
+var uploadRouter = require("./routes/upload");
 // ==========================================
 
 // Conecct BD
@@ -53,6 +55,8 @@ app.use("/login", loginRouter);
 app.use("/usuarios", usuarioRouter);
 app.use("/medicos", medicoRouter);
 app.use("/hospitales", hospitalRouter);
+app.use("/busqueda", busquedaRouter);
+app.use("/upload", uploadRouter);
 
 /* Manejador de errores */
 // catch 404 and forward to error handler

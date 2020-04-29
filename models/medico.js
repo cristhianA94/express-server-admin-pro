@@ -24,7 +24,7 @@ var medicoSchema = new Schema({
     },
     hospital: {
         type: Schema.Types.ObjectId,
-        ref: 'Usuario',
+        ref: 'Hospital',
         required: [true, 'El id del hospital es obligatorio'],
     },
 }, { collection: 'medicos' });
