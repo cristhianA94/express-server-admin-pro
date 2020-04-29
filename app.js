@@ -30,6 +30,7 @@ mongoose.connect(
     process.env.URLDB, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        useCreateIndex: true
     },
     (err, res) => {
         // Si se detecta algun error en la DB se cancela
