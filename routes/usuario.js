@@ -88,7 +88,7 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
     Usuario.findByIdAndUpdate(
         id,
         body, {
-            new: true,
+            new: true, // true para devolver el documento modificado
         },
         (err, usuarioDB) => {
             if (err) {

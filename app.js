@@ -7,7 +7,7 @@ var mongoose = require("mongoose");
 // Logs
 var logger = require("morgan");
 // Config
-require('./config/config');
+require("./config/config");
 var path = require("path");
 
 /* Middlewares */
@@ -22,7 +22,8 @@ var usuarioRouter = require("./routes/usuario");
 var medicoRouter = require("./routes/medico");
 var hospitalRouter = require("./routes/hospital");
 var busquedaRouter = require("./routes/busqueda");
-var uploadRouter = require("./routes/upload");
+var uploadRouter = require("./routes/uploads");
+var imagesRouter = require("./routes/imagenes");
 // ==========================================
 
 // Conecct BD
@@ -30,7 +31,7 @@ mongoose.connect(
     process.env.URLDB, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useCreateIndex: true
+        useCreateIndex: true,
     },
     (err, res) => {
         // Si se detecta algun error en la DB se cancela
@@ -50,6 +51,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Server index config
+var serveIndex = require("serve-index");
+// Permite dejar ver archivos subidos
+app.use(express.static(__dirname + "/"));
+app.use("/uploads", serveIndex(__dirname + "/uploads"));
+
 /* Rutas */
 app.use("/", homeRouter);
 app.use("/login", loginRouter);
@@ -57,7 +64,8 @@ app.use("/usuarios", usuarioRouter);
 app.use("/medicos", medicoRouter);
 app.use("/hospitales", hospitalRouter);
 app.use("/busqueda", busquedaRouter);
-app.use("/upload", uploadRouter);
+app.use("/uploads", uploadRouter);
+app.use("/img", imagesRouter);
 
 /* Manejador de errores */
 // catch 404 and forward to error handler
