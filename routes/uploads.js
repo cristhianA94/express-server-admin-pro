@@ -159,5 +159,3 @@ function subirPorTipo(tipo, id, nombreArchivo, res) {
 }
 
 module.exports = router;
-
-module.exports = router;

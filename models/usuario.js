@@ -17,10 +17,10 @@ var usuarioSchema = new Schema({
     },
     apellidos: {
         type: String,
-        required: [true, "Los apellidos son requeridos"],
+        required: false,
     },
     email: {
-        type: String,   
+        type: String,
         unique: true,
         // Valida la sensibilidad a mayusculas del registro
         uniqueCaseInsensitive: true,
@@ -40,6 +40,10 @@ var usuarioSchema = new Schema({
         default: 'USER_ROLE',
         enum: rolesValidos // Solo pueden existir los valores llamados
     },
+    google: {
+        type: Boolean,
+        default: false,
+    }
 }, { collection: 'usuarios' }); // Crea la coleccion en DB con ese nombre
 
 

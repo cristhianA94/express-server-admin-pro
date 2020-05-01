@@ -15,7 +15,7 @@ router.get("/", (req, res, next) => {
     desde = Number(desde);
 
     // Filtra solo ciertas columnas
-    Usuario.find({}, "nombres apellidos email img role")
+    Usuario.find({}, "nombres apellidos email img role google")
         // Limita el numero de usuarios a mostrar
         .limit(5)
         // Muestra los registros a partir del n° recibido
@@ -30,7 +30,7 @@ router.get("/", (req, res, next) => {
                 });
             }
 
-            Usuario.count({}, (err, conteo) => {
+            Usuario.countDocuments({}, (err, conteo) => {
                 res.status(200).json({
                     ok: true,
                     usuario: usuariosDB,

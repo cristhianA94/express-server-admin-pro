@@ -26,7 +26,7 @@ router.get("/", (req, res, next) => {
                 });
             }
 
-            Medico.count({}, (err, conteo) => {
+            Medico.countDocuments({}, (err, conteo) => {
                 res.status(200).json({
                     ok: true,
                     medico: medicosDB,
