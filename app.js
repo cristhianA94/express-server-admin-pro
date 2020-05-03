@@ -13,7 +13,8 @@ var path = require("path");
 /* Middlewares */
 // Analiza el encabezado de la cookie y completa las cookies de req.
 var cookieParser = require("cookie-parser");
-var app = express();
+// CORS: https://expressjs.com/en/resources/middleware/cors.html#simple-usage-enable-all-cors-requests
+var cors = require('cors');
 
 // Import Routes
 var homeRouter = require("./routes/home");
@@ -24,6 +25,18 @@ var hospitalRouter = require("./routes/hospital");
 var busquedaRouter = require("./routes/busqueda");
 var uploadRouter = require("./routes/uploads");
 var imagesRouter = require("./routes/imagenes");
+
+var app = express();
+
+// CORS
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    // Habilita solo estos metodos
+    res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+    next();
+});
+
 // ==========================================
 
 // Conecct BD
@@ -53,7 +66,7 @@ app.use(cookieParser());
 
 // Server index config
 var serveIndex = require("serve-index");
-// Permite dejar ver archivos subidos
+// Permite dejar ver archivos subidos **Quitar para mas privacidad
 app.use(express.static(__dirname + "/"));
 app.use("/uploads", serveIndex(__dirname + "/uploads"));
 

@@ -81,9 +81,11 @@ router.post("/google", async(req, res) => {
         } else {
             // Si el usuario no existe, se crea
             var usuario = new Usuario();
-            //var nombreCompleto = googleUser.nombres.split(" ");
-            //usuario.nombres = nombreCompleto.shift();
-            //usuario.apellidos = nombreCompleto[0].concat(' ', nombreCompleto[1]);
+            // Divide el nombre completo
+            var nombreSeparado = googleUser.nombres.split(" ");
+
+            usuario.nombres = nombreSeparado[0];
+            usuario.apellidos = nombreSeparado[1].concat(' ', nombreSeparado[2]);
             usuario.nombres = googleUser.nombres;
             usuario.email = googleUser.email;
             usuario.img = googleUser.img;
