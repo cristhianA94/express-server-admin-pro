@@ -17,7 +17,7 @@ router.get("/", (req, res, next) => {
     // Filtra solo ciertas columnas
     Usuario.find({}, "nombres apellidos email img role google")
         // Limita el numero de usuarios a mostrar
-        .limit(5)
+        // .limit(5)
         // Muestra los registros a partir del n° recibido
         // Ejem: si desde = 5, mostrará los usuarios partir del 5
         .skip(desde)
@@ -43,19 +43,20 @@ router.get("/", (req, res, next) => {
 // ==================================================
 // Crear un usuario
 // ==================================================
-router.post("/crear", (req, res) => {
+router.post("/crear", verificarToken.verificarToken, (req, res) => {
+
     var body = req.body;
 
-    var usuario = new Usuario({
+    var usuarioGuardar = new Usuario({
         nombres: body.nombres,
         apellidos: body.apellidos,
         email: body.email,
         password: bcrypt.hashSync(body.password, 10),
         img: body.img,
-        role: body.role,
+        role: body.role
     });
 
-    usuario.save((err, usuarioDB) => {
+    usuarioGuardar.save((err, usuarioDB) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -82,8 +83,21 @@ router.post("/crear", (req, res) => {
 // Actualizar un usuario
 // ==================================================
 router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
+
     var id = req.params.id;
     var body = req.body;
+
+    req.body.password = bcrypt.hashSync(body.password, 10);
+
+    var usuarioEditar = new Usuario({
+        //id: req.params.id,
+        nombres: body.nombres,
+        apellidos: body.apellidos,
+        email: body.email,
+        password: bcrypt.hashSync(body.password, 10),
+        img: body.img,
+        role: body.role
+    });
 
     Usuario.findByIdAndUpdate(
         id,

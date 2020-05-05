@@ -5,7 +5,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 // Token
 var jwt = require("jsonwebtoken");
-// Google
+// Google SignIn
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
@@ -33,6 +33,7 @@ async function verify(token) {
 }
 
 router.post("/google", async(req, res) => {
+
     var token = req.body.token;
     // Verifica token de Google Auth
     var googleUser = await verify(token).catch((err) => {
@@ -85,8 +86,8 @@ router.post("/google", async(req, res) => {
             var nombreSeparado = googleUser.nombres.split(" ");
 
             usuario.nombres = nombreSeparado[0];
-            usuario.apellidos = nombreSeparado[1].concat(' ', nombreSeparado[2]);
-            usuario.nombres = googleUser.nombres;
+            usuario.apellidos = nombreSeparado[1].concat(" ", nombreSeparado[2]);
+            //usuario.nombres = googleUser.nombres;
             usuario.email = googleUser.email;
             usuario.img = googleUser.img;
             usuario.google = true;
@@ -107,6 +108,7 @@ router.post("/google", async(req, res) => {
                     ok: true,
                     usuario: usuarioNew,
                     token: token,
+                    id: usuarioNew._id,
                 });
             });
         }

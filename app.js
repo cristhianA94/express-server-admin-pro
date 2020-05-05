@@ -14,7 +14,7 @@ var path = require("path");
 // Analiza el encabezado de la cookie y completa las cookies de req.
 var cookieParser = require("cookie-parser");
 // CORS: https://expressjs.com/en/resources/middleware/cors.html#simple-usage-enable-all-cors-requests
-var cors = require('cors');
+var cors = require("cors");
 
 // Import Routes
 var homeRouter = require("./routes/home");
@@ -27,17 +27,19 @@ var uploadRouter = require("./routes/uploads");
 var imagesRouter = require("./routes/imagenes");
 
 var app = express();
+// ==========================================
 
 // CORS
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
     // Habilita solo estos metodos
     res.header("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
     next();
 });
-
-// ==========================================
 
 // Conecct BD
 mongoose.connect(
@@ -45,6 +47,7 @@ mongoose.connect(
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
+        useFindAndModify: false,
     },
     (err, res) => {
         // Si se detecta algun error en la DB se cancela
