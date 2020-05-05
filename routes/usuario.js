@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
+
+// Token
+var jwt = require("jsonwebtoken");
 // Encriptacion 1 via
 const bcrypt = require("bcrypt");
 
@@ -43,8 +46,7 @@ router.get("/", (req, res, next) => {
 // ==================================================
 // Crear un usuario
 // ==================================================
-router.post("/crear", verificarToken.verificarToken, (req, res) => {
-
+router.post("/crear", (req, res) => {
     var body = req.body;
 
     var usuarioGuardar = new Usuario({
@@ -53,7 +55,7 @@ router.post("/crear", verificarToken.verificarToken, (req, res) => {
         email: body.email,
         password: bcrypt.hashSync(body.password, 10),
         img: body.img,
-        role: body.role
+        role: body.role,
     });
 
     usuarioGuardar.save((err, usuarioDB) => {
@@ -70,11 +72,21 @@ router.post("/crear", verificarToken.verificarToken, (req, res) => {
                 error: err,
             });
         }
+
+        // Crear token
+        var token = jwt.sign({
+                usuario: usuarioDB,
+            },
+            process.env.SEED, {
+                // Importa config
+                expiresIn: process.env.CADUCIDAD,
+            }
+        );
         res.status(200).json({
             ok: true,
             usuario: usuarioDB,
-            // Quien solicito la peticion
-            usuarioToken: req.usuario,
+            token: token,
+            id: usuarioDB._id,
         });
     });
 });
@@ -88,16 +100,6 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
     var body = req.body;
 
     req.body.password = bcrypt.hashSync(body.password, 10);
-
-    var usuarioEditar = new Usuario({
-        //id: req.params.id,
-        nombres: body.nombres,
-        apellidos: body.apellidos,
-        email: body.email,
-        password: bcrypt.hashSync(body.password, 10),
-        img: body.img,
-        role: body.role
-    });
 
     Usuario.findByIdAndUpdate(
         id,
