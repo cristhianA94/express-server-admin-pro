@@ -11,7 +11,7 @@ router.get("/:tipo/:img", (req, res, next) => {
     var img = req.params.img;
 
     // Especifica ruta relativa de la imagen
-    // @params __dirname: path actual
+    // params __dirname: path actual
     var pathImagen = path.resolve(__dirname, `../uploads/${tipo}/${img}`);
 
     if (fs.existsSync(pathImagen)) {

@@ -47,7 +47,7 @@ mongoose.connect(
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
-        useFindAndModify: false,
+        //useFindAndModify: false,
     },
     (err, res) => {
         // Si se detecta algun error en la DB se cancela
