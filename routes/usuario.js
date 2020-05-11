@@ -99,21 +99,13 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
-    let usuarioPorEditar = {
-        nombres: body.nombres,
-        apellidos: body.apellidos,
-        email: body.email,
-        password: body.password = bcrypt.hashSync(body.password, 10),
-        img: body.img,
-        role: body.role,
-        google: body.google
-    };
+    req.body.password = bcrypt.hashSync(body.password, 10);
 
     Usuario.findByIdAndUpdate(
         id,
-        usuarioPorEditar, {
+        body, {
             new: true, // true para devolver el documento modificado
-            omitUndefined: true
+            //omitUndefined: true
         },
         (err, usuarioDB) => {
             if (err) {

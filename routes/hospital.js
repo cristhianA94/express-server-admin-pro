@@ -76,14 +76,10 @@ router.post("/crear", verificarToken.verificarToken, (req, res) => {
 router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
     var id = req.params.id;
     var body = req.body;
-    let hospitalPorEditar = {
-        nombre: body.nombre,
-        img: body.img
-    };
 
     Hospital.findByIdAndUpdate(
         id,
-        hospitalPorEditar, {
+        body, {
             new: true,
         },
         (err, hospitalDB) => {
