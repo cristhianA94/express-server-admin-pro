@@ -29,7 +29,15 @@ var imagesRouter = require("./routes/imagenes");
 var app = express();
 // ==========================================
 
+// Server index config
+// **Desactivado porque no permite subir imagenes con el
+/* var serveIndex = require("serve-index");
+// Permite dejar ver archivos subidos **Quitar para mas privacidad
+app.use(express.static(__dirname + "/"));
+app.use("/uploads", serveIndex(__dirname + "/uploads")); */
+
 // CORS
+//app.use(cors());
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     res.header(
@@ -66,12 +74,6 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-// Server index config
-var serveIndex = require("serve-index");
-// Permite dejar ver archivos subidos **Quitar para mas privacidad
-app.use(express.static(__dirname + "/"));
-app.use("/uploads", serveIndex(__dirname + "/uploads"));
 
 /* Rutas */
 app.use("/", homeRouter);

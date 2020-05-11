@@ -80,9 +80,15 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
+    let medicoPorEditar = {
+        nombres: body.nombres,
+        apellidos: body.apellidos,
+        img: body.img
+    }
+
     Medico.findByIdAndUpdate(
         id,
-        body, {
+        medicoPorEditar, {
             new: true,
         },
         (err, medicoDB) => {

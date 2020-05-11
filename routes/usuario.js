@@ -20,7 +20,7 @@ router.get("/", (req, res, next) => {
     // Filtra solo ciertas columnas
     Usuario.find({}, "nombres apellidos email img role google")
         // Limita el numero de usuarios a mostrar
-        // .limit(5)
+        .limit(5)
         // Muestra los registros a partir del n° recibido
         // Ejem: si desde = 5, mostrará los usuarios partir del 5
         .skip(desde)
@@ -99,12 +99,21 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
-    req.body.password = bcrypt.hashSync(body.password, 10);
+    let usuarioPorEditar = {
+        nombres: body.nombres,
+        apellidos: body.apellidos,
+        email: body.email,
+        password: body.password = bcrypt.hashSync(body.password, 10),
+        img: body.img,
+        role: body.role,
+        google: body.google
+    };
 
     Usuario.findByIdAndUpdate(
         id,
-        body, {
+        usuarioPorEditar, {
             new: true, // true para devolver el documento modificado
+            omitUndefined: true
         },
         (err, usuarioDB) => {
             if (err) {
@@ -146,7 +155,7 @@ router.delete("/:id/eliminar", verificarToken.verificarToken, (req, res) => {
             return res.status(400).json({
                 ok: false,
                 msg: "El usuario con el id" + id + " no existe",
-                error: { msj: "No existe un usuario con ese ID" },
+                error: { msj: "No existe un usuario con ese ID" }
             });
         }
         res.status(200).json({

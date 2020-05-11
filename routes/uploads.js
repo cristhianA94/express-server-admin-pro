@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const fileUpload = require("express-fileupload");
-
 // Permite manejear archivos
 var fs = require("fs");
 
@@ -13,10 +12,11 @@ var Hospital = require("../models/hospital");
 // default options
 router.use(fileUpload());
 
+
 // ==================================================
 // Upload files
 // ==================================================
-router.put("/:tipo/:id", (req, res) => {
+router.put("/:tipo/:id", (req, res, next) => {
     var tipo = req.params.tipo;
     var id = req.params.id;
 
@@ -43,7 +43,7 @@ router.put("/:tipo/:id", (req, res) => {
     var extensionArchivo = nombreCortado[nombreCortado.length - 1];
 
     // Extensiones permitidas
-    var extensionesValidas = ["png", "jpg", "gif", "jpeg", "jiff"];
+    var extensionesValidas = ["png", "jpg", "gif", "jpeg", "jfif"];
     if (extensionesValidas.indexOf(extensionArchivo) < 0) {
         return res.status(400).json({
             ok: false,
