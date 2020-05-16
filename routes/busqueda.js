@@ -71,7 +71,7 @@ router.get("/todo/:busqueda", (req, res, next) => {
 function buscarHospitales(regex) {
     return new Promise((resolve, reject) => {
         Hospital.find({ nombre: regex })
-            .populate("usuario", "nombres apellidos email")
+            .populate("usuario", "nombres apellidos email img")
             .exec((err, hospitales) => {
                 if (err) {
                     reject("Error al cargar hospitales", err);
@@ -86,7 +86,7 @@ function buscarHospitales(regex) {
 function buscarMedicos(regex) {
     return new Promise((resolve, reject) => {
         Medico.find({ nombres: regex })
-            .populate("usuario", "nombres apellidos email")
+            .populate("usuario", "nombres apellidos email img")
             .populate("hospital")
             .exec((err, medicos) => {
                 if (err) {
@@ -101,7 +101,7 @@ function buscarMedicos(regex) {
 // Realiza la busqueda de usuarios de manera asincrona
 function buscarUsuarios(regex) {
     return new Promise((resolve, reject) => {
-        Usuario.find({}, "nombres apellidos email role")
+        Usuario.find({}, "nombres apellidos email img role")
             .or([{ nombres: regex }, { email: regex }])
             .exec((err, usuarios) => {
                 if (err) {

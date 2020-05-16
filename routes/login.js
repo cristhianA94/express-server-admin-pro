@@ -155,6 +155,7 @@ router.post("/", (req, res) => {
                         expiresIn: process.env.CADUCIDAD,
                     }
                 );
+                usuarioDB.password = ":)";
 
                 res.status(200).json({
                     ok: true,

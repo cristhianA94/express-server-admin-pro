@@ -5,17 +5,17 @@ var Hospital = require("../models/hospital");
 var verificarToken = require("../middleware/auth");
 
 // ==================================================
-// Obtener todos los hospital
+// Obtener todos los hospitales
 // ==================================================
-router.get("/", (req, res, next) => {
+router.get("/", (req, res) => {
     // Paginacion
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
     Hospital.find({})
         // Filtra solo ciertas columnas
-        .populate("usuario", "nombres apellidos email") // Permite acceder a la data completa del usuario
-        //.limit(5)
+        .populate("usuario", "nombres apellidos email img") // Permite acceder a la data completa del usuario
+        .limit(5)
         .skip(desde)
         .exec((err, hospitales) => {
             if (err) {
@@ -31,6 +31,35 @@ router.get("/", (req, res, next) => {
                     hospital: hospitales,
                     total: count,
                 });
+            });
+        });
+});
+
+// ==================================================
+// Obtiene un hospital
+// ==================================================
+router.get("/:id", (req, res) => {
+    var id = req.params.id;
+
+    Hospital.findById(id)
+        .populate("usuario", "nombres apellidos email img")
+        .exec((err, hospitalDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    error: err,
+                });
+            }
+            if (!hospitalDB) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: "El hospital con el ID: " + id + " no existe",
+                    error: { msj: "No existe un hospital con ese ID" },
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                hospital: hospitalDB,
             });
         });
 });
@@ -65,7 +94,7 @@ router.post("/crear", verificarToken.verificarToken, (req, res) => {
             ok: true,
             hospital: hospitalDB,
             // Quien solicito la peticion
-            hospitalToken: req.usuario,
+            usuarioToken: req.usuario
         });
     });
 });
@@ -92,7 +121,7 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
             if (!hospitalDB) {
                 return res.status(400).json({
                     ok: false,
-                    msg: "El hospital con el id" + id + " no existe",
+                    msg: "El hospital con el ID: " + id + " no existe",
                     error: { msj: "No existe un hospital con ese ID" },
                 });
             }
@@ -122,7 +151,7 @@ router.delete("/:id/eliminar", verificarToken.verificarToken, (req, res) => {
         if (!hospitalDB) {
             return res.status(400).json({
                 ok: false,
-                msg: "El hospital con el id" + id + " no existe",
+                msg: "El hospital con el ID: " + id + " no existe",
                 error: { msj: "No existe un hospital con ese ID" },
             });
         }

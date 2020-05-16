@@ -22,7 +22,6 @@ router.get("/", (req, res, next) => {
         // Limita el numero de usuarios a mostrar
         .limit(5)
         // Muestra los registros a partir del n° recibido
-        // Ejem: si desde = 5, mostrará los usuarios partir del 5
         .skip(desde)
         .exec((err, usuariosDB) => {
             if (err) {
@@ -41,6 +40,35 @@ router.get("/", (req, res, next) => {
                 });
             });
         });
+});
+
+// ==================================================
+// Obtiene un usuario
+// ==================================================
+router.get("/:id", (req, res) => {
+    var id = req.params.id;
+
+    Usuario.findById(id).exec((err, usuarioDB) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                error: err,
+            });
+        }
+
+        if (!usuarioDB) {
+            return res.status(400).json({
+                ok: false,
+                msg: "El usuario con el ID: " + id + "no existe.",
+                error: "No existe un usuario con ese ID.",
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            usuario: usuarioDB,
+        });
+    });
 });
 
 // ==================================================
@@ -95,7 +123,6 @@ router.post("/crear", (req, res) => {
 // Actualizar un usuario
 // ==================================================
 router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
-
     var id = req.params.id;
     var body = req.body;
 
@@ -117,7 +144,41 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
             if (!usuarioDB) {
                 return res.status(400).json({
                     ok: false,
-                    msg: "El usuario con el id" + id + " no existe",
+                    msg: "El usuario con el ID: " + id + " no existe",
+                    error: { msj: "No existe un usuario con ese ID" },
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                msg: "Usuario actualizado correctamente",
+                usuario: usuarioDB,
+            });
+        }
+    );
+});
+
+// ==================================================
+//  Actualiza solo el rol
+// ==================================================
+router.put("/:id/actualizarRol", verificarToken.verificarToken, (req, res) => {
+    var id = req.params.id;
+    var body = req.body;
+
+    Usuario.findByIdAndUpdate(
+        id, { role: body.role }, {
+            new: true, // true para devolver el documento modificado
+        },
+        (err, usuarioDB) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    error: err,
+                });
+            }
+            if (!usuarioDB) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: "El usuario con el ID: " + id + " no existe",
                     error: { msj: "No existe un usuario con ese ID" },
                 });
             }
@@ -146,8 +207,8 @@ router.delete("/:id/eliminar", verificarToken.verificarToken, (req, res) => {
         if (!usuarioDB) {
             return res.status(400).json({
                 ok: false,
-                msg: "El usuario con el id" + id + " no existe",
-                error: { msj: "No existe un usuario con ese ID" }
+                msg: "El usuario con el ID: " + id + " no existe",
+                error: { msj: "No existe un usuario con ese ID" },
             });
         }
         res.status(200).json({
