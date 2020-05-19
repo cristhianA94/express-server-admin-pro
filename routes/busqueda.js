@@ -85,8 +85,8 @@ function buscarHospitales(regex) {
 // Realiza la busqueda de medicos de manera asincrona
 function buscarMedicos(regex) {
     return new Promise((resolve, reject) => {
-        Medico.find({ nombres: regex })
-            .populate("usuario", "nombres apellidos email img")
+        Medico.find({ $or: [{ nombres: regex }, { apellidos: regex }] })
+            .populate("usuario", "nombres apellidos email img role")
             .populate("hospital")
             .exec((err, medicos) => {
                 if (err) {
@@ -101,15 +101,22 @@ function buscarMedicos(regex) {
 // Realiza la busqueda de usuarios de manera asincrona
 function buscarUsuarios(regex) {
     return new Promise((resolve, reject) => {
-        Usuario.find({}, "nombres apellidos email img role")
-            .or([{ nombres: regex }, { email: regex }])
-            .exec((err, usuarios) => {
-                if (err) {
-                    reject("Error al buscar usuario", err);
-                } else {
-                    resolve(usuarios);
-                }
-            });
+        Usuario.find({
+                $or: [
+                    { nombres: regex },
+                    { apellidos: regex },
+                    { email: regex },
+                    { role: regex },
+                ],
+            },
+            "nombres apellidos email img role"
+        ).exec((err, usuarios) => {
+            if (err) {
+                reject("Error al buscar usuario", err);
+            } else {
+                resolve(usuarios);
+            }
+        });
     });
 }
 
