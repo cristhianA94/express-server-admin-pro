@@ -122,7 +122,7 @@ router.post("/crear", (req, res) => {
 // ==================================================
 // Actualizar un usuario
 // ==================================================
-router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
+router.put("/:id/actualizar", [verificarToken.verificarToken, verificarToken.verificarAdmin_MismoUsuario], (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
@@ -160,7 +160,7 @@ router.put("/:id/actualizar", verificarToken.verificarToken, (req, res) => {
 // ==================================================
 //  Actualiza solo el rol
 // ==================================================
-router.put("/:id/actualizarRol", verificarToken.verificarToken, (req, res) => {
+router.put("/:id/actualizarRol", [verificarToken.verificarToken, verificarToken.verificarAdminRole], (req, res) => {
     var id = req.params.id;
     var body = req.body;
 
@@ -194,7 +194,7 @@ router.put("/:id/actualizarRol", verificarToken.verificarToken, (req, res) => {
 // ==================================================
 // Eliminar un usuario
 // ==================================================
-router.delete("/:id/eliminar", verificarToken.verificarToken, (req, res) => {
+router.delete("/:id/eliminar", [verificarToken.verificarToken, verificarToken.verificarAdminRole], (req, res) => {
     var id = req.params.id;
 
     Usuario.findByIdAndRemove(id, (err, usuarioDB) => {

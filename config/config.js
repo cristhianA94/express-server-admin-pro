@@ -2,8 +2,9 @@
 var urlDB;
 
 urlDBDevelopment = "mongodb://localhost:27017/hospitalDB";
-urlDBProduction = '';
+urlDBProduction = "mongodb+srv://admin-pro:84G0mnqsroYOM5AJ@cluster.fjmnz.mongodb.net/hospitalesDB?retryWrites=true&w=majority";
 process.env.URLDB = urlDBDevelopment;
+process.env.URLDBPROD = urlDBProduction;
 
 // SEED token
 process.env.SEED = process.env.SEED || "seed-secreto";

@@ -61,7 +61,7 @@ app.use((req, res, next) => {
 
 // Conecct BD
 mongoose.connect(
-    process.env.URLDB, {
+    process.env.URLDBPROD || process.env.URLDB, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,

@@ -11,8 +11,31 @@ const client = new OAuth2Client(process.env.CLIENT_ID);
 
 var Usuario = require("../models/usuario");
 
+var mdAutenticacion = require("../middleware/auth");
+
 // ==================================================
-// Login Google
+// Renovar Token
+// ==================================================
+router.get("/renovarToken", mdAutenticacion.verificarToken, (req, res) => {
+
+    // Crear token
+    var token = jwt.sign({
+            usuario: req.usuario,
+        },
+        process.env.SEED, {
+            // Importa config
+            expiresIn: process.env.CADUCIDAD,
+        }
+    );
+
+    res.status(200).json({
+        ok: true,
+        token: token
+    });
+});
+
+// ==================================================
+// Verificar token
 // ==================================================
 async function verify(token) {
     var ticket = await client.verifyIdToken({
@@ -32,8 +55,10 @@ async function verify(token) {
     };
 }
 
+// ==================================================
+// Login Google
+// ==================================================
 router.post("/google", async(req, res) => {
-
     var token = req.body.token;
     // Verifica token de Google Auth
     var googleUser = await verify(token).catch((err) => {
@@ -77,6 +102,7 @@ router.post("/google", async(req, res) => {
                     usuario: usuarioDB,
                     token: token,
                     id: usuarioDB._id,
+                    menu: obtenerMenu(usuarioDB.role),
                 });
             }
         } else {
@@ -109,6 +135,7 @@ router.post("/google", async(req, res) => {
                     usuario: usuarioNew,
                     token: token,
                     id: usuarioNew._id,
+                    menu: obtenerMenu(usuario.role),
                 });
             });
         }
@@ -134,7 +161,7 @@ router.post("/", (req, res) => {
             if (!usuarioDB) {
                 return res.status(400).json({
                     ok: false,
-                    msg: "Credenciales incorectas - email",
+                    msg: "Email incorrecto",
                     error: err,
                 });
             }
@@ -142,7 +169,7 @@ router.post("/", (req, res) => {
             if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
                 return res.status(400).json({
                     ok: false,
-                    msg: "Credenciales incorectas - password",
+                    msg: "Password incorecta",
                     error: err,
                 });
             } else {
@@ -162,10 +189,43 @@ router.post("/", (req, res) => {
                     usuario: usuarioDB,
                     token: token,
                     id: usuarioDB._id,
+                    menu: obtenerMenu(usuarioDB.role),
                 });
             }
         }
     );
 });
+
+// Obtiene el menu segun el Role
+function obtenerMenu(ROLE) {
+    // Menus laterales
+    var menu = [{
+            titulo: "Principal",
+            icono: "mdi mdi-gauge",
+            submenu: [
+                { titulo: "Dashboard", url: "/dashboard" },
+                { titulo: "ProgressBar", url: "/progress" },
+                { titulo: "Gráficas", url: "/graficas1" },
+                { titulo: "Promesas", url: "/promesas" },
+                { titulo: "Rxjs", url: "/rxjs" },
+            ],
+        },
+        {
+            titulo: "Mantenimientos",
+            icono: "mdi mdi-folder-lock-open",
+            submenu: [
+                //{ titulo: 'Usuarios', url: '/usuarios' },
+                { titulo: "Hospitales", url: "/hospitales" },
+                { titulo: "Médicos", url: "/medicos" },
+            ],
+        },
+    ];
+
+    if (ROLE == "ADMIN_ROLE") {
+        menu[1].submenu.unshift({ titulo: "Usuarios", url: "/usuarios" });
+    }
+
+    return menu;
+}
 
 module.exports = router;
