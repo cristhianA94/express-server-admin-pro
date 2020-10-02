@@ -51,6 +51,12 @@ Instalar node modules:
 npm install
 ```
 
+Ejecutar modo desarrollador:
+
+```
+npm run desarrollo
+```
+
 Ejecutar:
 
 ```

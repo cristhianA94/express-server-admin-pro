@@ -1,10 +1,11 @@
 {
     "name": "backend-server",
     "version": "1.0.0",
-    "description": "Server backendo for admin pro",
+    "description": "Server for management users, hospitals and doctors for admin pro app in front",
     "private": true,
     "scripts": {
-        "start": "nodemon ./bin/www",
+        "start": "node ./bin/www",
+        "desarrollo": "nodemon ./bin/www",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "dependencies": {
@@ -12,6 +13,7 @@
         "cookie-parser": "^1.4.5",
         "cors": "^2.8.5",
         "debug": "~2.6.9",
+        "dotenv": "^8.2.0",
         "express": "^4.17.1",
         "express-fileupload": "^1.1.7-alpha.3",
         "google-auth-library": "^6.0.0",

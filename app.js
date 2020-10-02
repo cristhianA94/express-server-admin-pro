@@ -1,3 +1,4 @@
+var path = require("path");
 // Manejador de errores
 var createError = require("http-errors");
 // Express
@@ -6,11 +7,11 @@ var express = require("express");
 var mongoose = require("mongoose");
 // Logs
 var logger = require("morgan");
-// Config
-require("./config/config");
-var path = require("path");
+// Config Variables
+require('dotenv').config({ path: 'config/config.env' });
 
-/* Middlewares */
+
+/*              Middlewares */
 // Analiza el encabezado de la cookie y completa las cookies de req.
 var cookieParser = require("cookie-parser");
 // CORS: https://expressjs.com/en/resources/middleware/cors.html#simple-usage-enable-all-cors-requests
@@ -61,7 +62,7 @@ app.use((req, res, next) => {
 
 // Conecct BD
 mongoose.connect(
-    process.env.URLDBPROD || process.env.URLDB, {
+    process.env.HOST || process.env.DB_URL, { //Var DB or HOST
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
