@@ -37,10 +37,32 @@ Documentation API 📃: [POSTMAN](https://documenter.getpostman.com/view/7403922
 
 ### Prerequisites 📋
 
-Configuraciones de la BD y token se encuentra en:
+Configuraciones de la BD se encuentra en:
 
 ```
-config/config.js
+config/
+```
+
+- Debe crear el archivo config.env
+- Dentro iran las siguientes variables
+
+```
+// DB Keys: development and production
+DB_URL=urlLocalhost
+HOST=urlHosting
+
+// SEED token
+SEED=clave-cualquiera
+
+// CADUCIDAD
+CADUCIDAD=30d
+
+// GoogleAuth KEYS
+// Crear ID cliente en: https://console.cloud.google.com/apis/credentials
+CLIENT_ID=IDKeys
+
+//Puerto
+PORT=3000
 ```
 
 ### Installing 🔧
@@ -51,33 +73,21 @@ Instalar node modules:
 npm install
 ```
 
-Ejecutar modo desarrollador:
+### Run modo desarrollador:
 
 ```
 npm run desarrollo
 ```
 
-Ejecutar:
+### Run:
 
 ```
 npm start
 ```
 
-## Running the tests ⚙️
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests 🔩
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
 ## Deployment 📦
 
-Add additional notes about how to deploy this on a live system
+[Heroku](https://admin-pro-express.herokuapp.com/)
 ️
 
 ## Built With ️️🛠️
@@ -91,7 +101,7 @@ Add additional notes about how to deploy this on a live system
 
 ## Versioning 📌
 
-Release [V1.1.0](https://github.com/cristhianA94/express-server-admin-pro/releases/tag/V1.1.0)
+Last Release [V1.1.1](https://github.com/cristhianA94/express-server-admin-pro/releases/tag/V1.1.1)
 
 ## Authors ️
 
