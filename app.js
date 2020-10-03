@@ -8,8 +8,7 @@ var mongoose = require("mongoose");
 // Logs
 var logger = require("morgan");
 // Config Variables
-require('dotenv').config({ path: 'config/config.env' });
-
+require("dotenv").config({ path: "config/config.env" });
 
 /*              Middlewares */
 // Analiza el encabezado de la cookie y completa las cookies de req.
@@ -62,16 +61,20 @@ app.use((req, res, next) => {
 
 // Conecct BD
 mongoose.connect(
-    process.env.HOST || process.env.DB_URL, { //Var DB or HOST
+    process.env.HOST || process.env.DB_URL, {
+        //Var DB or HOST
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
         //useFindAndModify: false,
     },
     (err, res) => {
-        // Si se detecta algun error en la DB se cancela
-        if (err) throw err;
-        console.log("Mongo DB: \x1b[36m", "online");
+        try {
+            console.log("Mongo DB: \x1b[36m", "online");
+            // Si se detecta algun error en la DB se cancela
+        } catch (err) {
+            next(err);
+        }
     }
 );
 
